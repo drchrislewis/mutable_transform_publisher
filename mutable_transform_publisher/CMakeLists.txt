@@ -16,6 +16,7 @@ find_package(mutable_transform_publisher_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(std_srvs REQUIRED)
 
 ###########
 ## Build ##
@@ -43,6 +44,7 @@ ament_target_dependencies(${PROJECT_NAME}
                           "tf2"
                           "tf2_ros"
                           "mutable_transform_publisher_msgs"
+			  "std_srvs"
                           )
 
 target_link_libraries(${PROJECT_NAME}
@@ -66,7 +68,7 @@ target_link_libraries(${PROJECT_NAME}_yaml
 # Primary Node
 add_executable(${PROJECT_NAME}_node src/mutable_transform_publisher_node.cpp)
 
-set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME mutable_transform_pub PREFIX "")
+set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME mutable_transform_publisher PREFIX "")
 
 ament_target_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
@@ -107,6 +109,15 @@ install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_yaml ${PROJECT_NAME}_node
 
 install(TARGETS ${PROJECT_NAME}_node
         DESTINATION lib/${PROJECT_NAME})
+
+# Install the library
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}-targets
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)
 
 install(DIRECTORY test
         DESTINATION share/${PROJECT_NAME})
